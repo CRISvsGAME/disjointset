@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "disjointset"
+version = "0.1.0"
+dependencies = []
+requires-python = ">=3.12"
+authors = [{name = "CRISvsGAME", email = "cris@crisvsgame.com"}]
+maintainers = [{name = "CRISvsGAME", email = "cris@crisvsgame.com"}]
+description = "Disjoint Set - Data Structure Implementation"
+readme = "README.md"
+license = "MIT"
+keywords = ["disjoint set", "data structure", "union find"]
+classifiers = [
+    "Development Status :: 1 - Planning",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development :: Libraries",
+]
+
+[project.optional-dependencies]
+dev = ["mypy", "pylint", "pytest"]
+
+[project.urls]
+Repository = "https://github.com/CRISvsGAME/disjointset.git"
+
+[tool.pylint]
+ignore-patterns = [".*\\.pyi"]
