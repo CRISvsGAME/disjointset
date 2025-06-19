@@ -27,3 +27,19 @@ class DisjointSet(Generic[T]):
     def __init__(self) -> None:
         self.parent: dict[T, T] = {}
         self.rank: dict[T, int] = {}
+
+    # --------------------------------------------------------------------------
+    # Core Operations
+    # --------------------------------------------------------------------------
+
+    def make_set(self, x: T) -> None:
+        """
+        Create a new set containing the single element x.
+        If x is already present, this is a no-op.
+
+        Args:
+            x: The element to add to the DisjointSet.
+        """
+        if x not in self.parent:
+            self.parent[x] = x
+            self.rank[x] = 0
