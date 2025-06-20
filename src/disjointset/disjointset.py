@@ -43,3 +43,24 @@ class DisjointSet(Generic[T]):
         if x not in self.parent:
             self.parent[x] = x
             self.rank[x] = 0
+
+    def find(self, x: T) -> T:
+        """
+        Return the representative (root) of the set containing x.
+        Applies path compression to keep trees shallow.
+
+        Args:
+            x: The element to find its set representative for.
+
+        Raises:
+            KeyError: If x has not been added via make_set().
+
+        Returns:
+            The representative element of the set containing x.
+        """
+        if x not in self.parent:
+            raise KeyError(f"{x!r} is not in the DisjointSet.")
+
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])
+        return self.parent[x]
