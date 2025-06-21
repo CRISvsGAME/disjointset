@@ -64,3 +64,28 @@ class DisjointSet(Generic[T]):
         if self.parent[x] != x:
             self.parent[x] = self.find(self.parent[x])
         return self.parent[x]
+
+    def union(self, x: T, y: T) -> None:
+        """
+        Merge the sets containing x and y using union-by-rank.
+        If x and y are already in the same set, this is a no-op.
+
+        Args:
+            x: An element in the first set.
+            y: An element in the second set.
+
+        Raises:
+            KeyError: If x or y has not been added via make_set().
+        """
+        rx = self.find(x)
+        ry = self.find(y)
+
+        if rx == ry:
+            return
+
+        if self.rank[rx] < self.rank[ry]:
+            self.parent[rx] = ry
+        else:
+            self.parent[ry] = rx
+            if self.rank[rx] == self.rank[ry]:
+                self.rank[rx] += 1
