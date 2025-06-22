@@ -89,3 +89,19 @@ class DisjointSet(Generic[T]):
             self.parent[ry] = rx
             if self.rank[rx] == self.rank[ry]:
                 self.rank[rx] += 1
+
+    def same_set(self, x: T, y: T) -> bool:
+        """
+        Check if elements x and y are in the same set.
+
+        Args:
+            x: An element in the first set.
+            y: An element in the second set.
+
+        Raises:
+            KeyError: If x or y has not been added via make_set().
+
+        Returns:
+            True if x and y are in the same set, False otherwise.
+        """
+        return self.find(x) == self.find(y)
