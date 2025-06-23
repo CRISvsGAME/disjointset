@@ -1,7 +1,7 @@
 """Disjoint Set (Union Find) Data Structure."""
 
 from __future__ import annotations
-from typing import Generic, TypeVar
+from typing import Generic, Iterable, TypeVar
 from collections.abc import Hashable
 
 T = TypeVar("T", bound=Hashable)
@@ -105,3 +105,17 @@ class DisjointSet(Generic[T]):
             True if x and y are in the same set, False otherwise.
         """
         return self.find(x) == self.find(y)
+
+    # --------------------------------------------------------------------------
+    # Convenience Helpers
+    # --------------------------------------------------------------------------
+
+    def make_set_many(self, elements: Iterable[T]) -> None:
+        """
+        Convenience method to make_set() many elements at once.
+
+        Args:
+            elements: An iterable of elements to add to the DisjointSet.
+        """
+        for x in elements:
+            self.make_set(x)
