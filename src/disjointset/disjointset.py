@@ -119,3 +119,18 @@ class DisjointSet(Generic[T]):
         """
         for x in elements:
             self.make_set(x)
+
+    def find_many(self, elements: Iterable[T]) -> tuple[T, ...]:
+        """
+        Convenience method to find() many representatives at once.
+
+        Args:
+            elements: An iterable of elements to find representatives for.
+
+        Raises:
+            KeyError: If any element has not been added via make_set().
+
+        Returns:
+            A tuple of representatives corresponding to the elements.
+        """
+        return tuple(self.find(x) for x in elements)
