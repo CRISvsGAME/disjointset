@@ -134,3 +134,24 @@ class DisjointSet(Generic[T]):
             A tuple of representatives corresponding to the elements.
         """
         return tuple(self.find(x) for x in elements)
+
+    def union_many(self, elements: Iterable[T]) -> None:
+        """
+        Convenience method to union() many elements into a single set.
+
+        Args:
+            elements: An iterable of elements to union together.
+
+        Raises:
+            ValueError: If no elements are provided.
+            KeyError: If any element has not been added via make_set().
+        """
+        iterator = iter(elements)
+
+        try:
+            first = next(iterator)
+        except StopIteration as e:
+            raise ValueError("union_many() requires at least one element.") from e
+
+        for x in iterator:
+            self.union(first, x)
