@@ -155,3 +155,32 @@ class DisjointSet(Generic[T]):
 
         for x in iterator:
             self.union(first, x)
+
+    def same_set_many(self, elements: Iterable[T]) -> bool:
+        """
+        Convenience method to check if all elements are in the same set.
+
+        Args:
+            elements: An iterable of elements to check.
+
+        Raises:
+            ValueError: If no elements are provided.
+            KeyError: If any element has not been added via make_set().
+
+        Returns:
+            True if all elements are in the same set, False otherwise.
+        """
+        iterator = iter(elements)
+
+        try:
+            first = next(iterator)
+        except StopIteration as e:
+            raise ValueError("same_set_many() requires at least one element.") from e
+
+        root = self.find(first)
+
+        for x in iterator:
+            if self.find(x) != root:
+                return False
+
+        return True
