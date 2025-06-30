@@ -1,5 +1,6 @@
 """Tests for Disjoint Set (Union Find) Data Structure."""
 
+import pytest
 from disjointset import DisjointSet
 
 # ------------------------------------------------------------------------------
@@ -87,3 +88,69 @@ def test_same_set_many():
     assert dsu.same_set_many([1, 2, 3])
     assert dsu.same_set_many([4, 5])
     assert not dsu.same_set_many([1, 2, 3, 4, 5])
+
+
+# ------------------------------------------------------------------------------
+# Error Handling Tests
+# ------------------------------------------------------------------------------
+
+
+def test_find_missing_raises():
+    """Test that find raises KeyError for missing element."""
+    dsu = DisjointSet[int]()
+    with pytest.raises(KeyError):
+        dsu.find(1)
+
+
+def test_union_missing_raises():
+    """Test that union raises KeyError for missing element."""
+    dsu = DisjointSet[int]()
+    dsu.make_set(1)
+    with pytest.raises(KeyError):
+        dsu.union(1, 2)
+
+
+def test_same_set_missing_raises():
+    """Test that same_set raises KeyError for missing element."""
+    dsu = DisjointSet[int]()
+    dsu.make_set(1)
+    with pytest.raises(KeyError):
+        dsu.same_set(1, 2)
+
+
+def teste_find_many_missing_raises():
+    """Test that find_many raises KeyError for missing element."""
+    dsu = DisjointSet[int]()
+    dsu.make_set(1)
+    with pytest.raises(KeyError):
+        dsu.find_many([1, 2])
+
+
+def test_union_many_empty_raises():
+    """Test that union_many raises ValueError for empty input."""
+    dsu = DisjointSet[int]()
+    with pytest.raises(ValueError):
+        dsu.union_many([])
+
+
+def test_union_many_missing_raises():
+    """Test that union_many raises KeyError for missing element."""
+    dsu = DisjointSet[int]()
+    dsu.make_set(1)
+    with pytest.raises(KeyError):
+        dsu.union_many([1, 2])
+
+
+def test_same_set_many_empty_raises():
+    """Test that same_set_many raises ValueError for empty input."""
+    dsu = DisjointSet[int]()
+    with pytest.raises(ValueError):
+        dsu.same_set_many([])
+
+
+def test_same_set_many_missing_raises():
+    """Test that same_set_many raises KeyError for missing element."""
+    dsu = DisjointSet[int]()
+    dsu.make_set(1)
+    with pytest.raises(KeyError):
+        dsu.same_set_many([1, 2])
