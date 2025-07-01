@@ -154,3 +154,29 @@ def test_same_set_many_missing_raises():
     dsu.make_set(1)
     with pytest.raises(KeyError):
         dsu.same_set_many([1, 2])
+
+
+# ------------------------------------------------------------------------------
+# Optimizations Tests
+# ------------------------------------------------------------------------------
+
+
+def test_path_compression_effectiveness():
+    """Test that path compression flattens the structure."""
+    dsu = DisjointSet[int]()
+    dsu.make_set_many(range(1, 11))
+
+    # Create A Linear Chain
+    for i in range(2, 11):
+        dsu.parent[i] = i - 1
+
+    # Before Path Compression
+    for i in range(1, 10):
+        assert dsu.parent[i + 1] == i
+
+    # Trigger Path Compression
+    root = dsu.find(10)
+
+    # After Path Compression
+    for i in range(1, 11):
+        assert dsu.parent[i] == root
