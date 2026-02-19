@@ -24,6 +24,8 @@ class DisjointSet(Generic[T]):
             - same_set_many([x, y, z])
     """
 
+    __slots__ = ("parent", "rank")
+
     def __init__(self) -> None:
         self.parent: dict[T, T] = {}
         self.rank: dict[T, int] = {}
