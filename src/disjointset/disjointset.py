@@ -42,8 +42,10 @@ class DisjointSet(Generic[T]):
         Args:
             x: The element to add to the DisjointSet.
         """
-        if x not in self.parent:
-            self.parent[x] = x
+        p = self.parent
+
+        if x not in p:
+            p[x] = x
             self.rank[x] = 0
 
     def find(self, x: T) -> T:
