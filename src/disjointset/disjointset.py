@@ -62,12 +62,22 @@ class DisjointSet(Generic[T]):
         Returns:
             The representative element of the set containing x.
         """
-        if x not in self.parent:
-            raise KeyError(f"{x!r} is not in the DisjointSet.")
+        p = self.parent
 
-        if self.parent[x] != x:
-            self.parent[x] = self.find(self.parent[x])
-        return self.parent[x]
+        try:
+            root = p[x]
+        except KeyError as e:
+            raise KeyError(f"{x!r} is not in the DisjointSet.") from e
+
+        while root != p[root]:
+            root = p[root]
+
+        while x != root:
+            px = p[x]
+            p[x] = root
+            x = px
+
+        return root
 
     def union(self, x: T, y: T) -> None:
         """
