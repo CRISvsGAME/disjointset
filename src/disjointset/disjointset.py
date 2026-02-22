@@ -91,18 +91,23 @@ class DisjointSet(Generic[T]):
         Raises:
             KeyError: If x or y has not been added via make_set().
         """
-        rx = self.find(x)
-        ry = self.find(y)
+        p = self.parent
+        r = self.rank
+        root_x = self.find(x)
+        root_y = self.find(y)
 
-        if rx == ry:
+        if root_x == root_y:
             return
 
-        if self.rank[rx] < self.rank[ry]:
-            self.parent[rx] = ry
+        rank_x = r[root_x]
+        rank_y = r[root_y]
+
+        if rank_x < rank_y:
+            p[root_x] = root_y
         else:
-            self.parent[ry] = rx
-            if self.rank[rx] == self.rank[ry]:
-                self.rank[rx] += 1
+            p[root_y] = root_x
+            if rank_x == rank_y:
+                r[root_x] += 1
 
     def same_set(self, x: T, y: T) -> bool:
         """
