@@ -24,11 +24,11 @@ class DisjointSet(Generic[T]):
             - same_set_many([x, y, z])
     """
 
-    __slots__ = ("parent", "rank")
+    __slots__ = ("parent", "size")
 
     def __init__(self) -> None:
         self.parent: dict[T, T] = {}
-        self.rank: dict[T, int] = {}
+        self.size: dict[T, int] = {}
 
     # --------------------------------------------------------------------------
     # Core Operations
@@ -46,7 +46,7 @@ class DisjointSet(Generic[T]):
 
         if x not in p:
             p[x] = x
-            self.rank[x] = 0
+            self.size[x] = 1
 
     def find(self, x: T) -> T:
         """
@@ -81,7 +81,7 @@ class DisjointSet(Generic[T]):
 
     def union(self, x: T, y: T) -> None:
         """
-        Merge the sets containing x and y using union-by-rank.
+        Merge the sets containing x and y using union-by-size.
         If x and y are already in the same set, this is a no-op.
 
         Args:
@@ -92,22 +92,22 @@ class DisjointSet(Generic[T]):
             KeyError: If x or y has not been added via make_set().
         """
         p = self.parent
-        r = self.rank
+        s = self.size
         root_x = self.find(x)
         root_y = self.find(y)
 
         if root_x == root_y:
             return
 
-        rank_x = r[root_x]
-        rank_y = r[root_y]
+        size_x = s[root_x]
+        size_y = s[root_y]
 
-        if rank_x < rank_y:
+        if size_x < size_y:
             p[root_x] = root_y
+            s[root_y] += size_x
         else:
             p[root_y] = root_x
-            if rank_x == rank_y:
-                r[root_x] += 1
+            s[root_x] += size_y
 
     def same_set(self, x: T, y: T) -> bool:
         """
