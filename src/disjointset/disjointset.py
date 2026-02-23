@@ -203,3 +203,14 @@ class DisjointSet(Generic[T]):
                 return False
 
         return True
+
+    # ------------------------------------------------------------------------------
+    # Metadata Helpers
+    # ------------------------------------------------------------------------------
+    def __len__(self) -> int:
+        """Get the total number of elements in the DisjointSet."""
+        return len(self.parent)
+
+    def get_element_count(self) -> int:
+        """Get the total number of elements in the DisjointSet."""
+        return len(self)
