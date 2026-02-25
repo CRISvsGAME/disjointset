@@ -118,7 +118,7 @@ def test_same_set_missing_raises():
         dsu.same_set(1, 2)
 
 
-def teste_find_many_missing_raises():
+def test_find_many_missing_raises():
     """Test that find_many raises KeyError for missing element."""
     dsu = DisjointSet[int]()
     dsu.make_set(1)
@@ -156,6 +156,80 @@ def test_same_set_many_missing_raises():
         dsu.same_set_many([1, 2])
 
 
+# --------------------------------------------------------------------------
+# Metadata Helpers Tests
+# --------------------------------------------------------------------------
+
+
+def test_len_and_get_element_count():
+    """Test __len__ and get_element_count() reflect the number of elements."""
+    dsu = DisjointSet[int]()
+    assert len(dsu) == 0
+    assert dsu.get_element_count() == 0
+    dsu.make_set_many([1, 2, 3])
+    assert len(dsu) == 3
+    assert dsu.get_element_count() == 3
+    dsu.make_set(3)
+    assert len(dsu) == 3
+    assert dsu.get_element_count() == 3
+
+
+def test_component_count_tracks_components():
+    """Test get_component_count() reflects the number of disjoint sets."""
+    dsu = DisjointSet[int]()
+    dsu.make_set_many([1, 2, 3, 4])
+    assert dsu.get_component_count() == 4
+    dsu.union(1, 2)
+    assert dsu.get_component_count() == 3
+    dsu.union(2, 3)
+    assert dsu.get_component_count() == 2
+    dsu.union(1, 3)
+    assert dsu.get_component_count() == 2
+    dsu.union(1, 4)
+    assert dsu.get_component_count() == 1
+
+
+def test_component_count_idempotent_make_set():
+    """Test make_set() idempotency does not affect component count."""
+    dsu = DisjointSet[int]()
+    dsu.make_set(1)
+    assert dsu.get_component_count() == 1
+    dsu.make_set(1)
+    assert dsu.get_component_count() == 1
+
+
+def test_get_component_size_singletons():
+    """Test get_component_size() returns 1 for singleton sets."""
+    dsu = DisjointSet[int]()
+    dsu.make_set_many([1, 2, 3])
+    assert dsu.get_component_size(1) == 1
+    assert dsu.get_component_size(2) == 1
+    assert dsu.get_component_size(3) == 1
+
+
+def test_get_component_size_after_unions():
+    """Test get_component_size() reflects merged sets."""
+    dsu = DisjointSet[int]()
+    dsu.make_set_many([1, 2, 3, 4, 5])
+    dsu.union(1, 2)
+    assert dsu.get_component_size(1) == 2
+    assert dsu.get_component_size(2) == 2
+    dsu.union(3, 4)
+    assert dsu.get_component_size(3) == 2
+    assert dsu.get_component_size(4) == 2
+    dsu.union(1, 3)
+    for x in (1, 2, 3, 4):
+        assert dsu.get_component_size(x) == 4
+    assert dsu.get_component_size(5) == 1
+
+
+def test_get_component_size_missing_raises():
+    """Test get_component_size() raises KeyError for missing elements."""
+    dsu = DisjointSet[int]()
+    with pytest.raises(KeyError):
+        dsu.get_component_size(1)
+
+
 # ------------------------------------------------------------------------------
 # Optimizations Tests
 # ------------------------------------------------------------------------------
@@ -176,6 +250,7 @@ def test_path_compression_effectiveness():
 
     # Trigger Path Compression
     root = dsu.find(10)
+    assert root == 1
 
     # After Path Compression
     for i in range(1, 11):
