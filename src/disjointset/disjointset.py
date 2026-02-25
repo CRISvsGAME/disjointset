@@ -222,3 +222,18 @@ class DisjointSet(Generic[T]):
     def get_component_count(self) -> int:
         """Get the current number of disjoint sets (components)."""
         return self._component_count
+
+    def get_component_size(self, x: T) -> int:
+        """
+        Get the size of the component (set) containing element x.
+
+        Args:
+            x: The element to query the component size for.
+
+        Raises:
+            KeyError: If x has not been added via make_set().
+
+        Returns:
+            The size of the component containing x.
+        """
+        return self.size[self.find(x)]
