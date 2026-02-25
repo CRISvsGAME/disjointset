@@ -39,25 +39,68 @@ tom = Person("Tom")
 
 dsu = DisjointSet[int | str | Person]()
 
-# make_set and make_set_many
+# make_set and make_set_many ---------------------------------------------------
 dsu.make_set(1)
+# (1)
+
 dsu.make_set("Ali")
+# (1, "Ali")
+
 dsu.make_set(ali)
-dsu.make_set_many([2, 3, "Bob", "Tom", bob, tom])
+# (1, "Ali", ali)
 
-# union and union_many
-dsu.union(1, 2)
+dsu.make_set_many([2, "Bob", bob, 3, "Tom", tom])
+# (1, "Ali", ali, 2, "Bob", bob, 3, "Tom", tom)
+
+# union and union_many ---------------------------------------------------------
+dsu.union(1, "Ali")
+# ({1, "Ali"}, ali, 2, "Bob", bob, 3, "Tom", tom)
+
 dsu.union("Ali", ali)
-dsu.union(1, ali)
-dsu.union_many(["Bob", bob])
-dsu.union_many([3, "Tom", tom])
+# ({1, "Ali", ali}, 2, "Bob", bob, 3, "Tom", tom)
 
-# True
+dsu.union_many([2, "Bob", bob])
+# ({1, "Ali", ali}, {2, "Bob", bob}, 3, "Tom", tom)
+
+dsu.union_many([3, "Tom", tom])
+# ({1, "Ali", ali}, {2, "Bob", bob}, {3, "Tom", tom})
+
+# same_set and same_set_many ---------------------------------------------------
 print(dsu.same_set(1, ali))
-print(dsu.same_set(2, "Ali"))
-print(dsu.same_set("Bob", bob))
-print(dsu.same_set_many([3, "Tom", tom]))
-print(dsu.same_set_many([1, 2, "Ali", ali]))
+# True
+
+print(dsu.same_set("Ali", 2))
+# False
+
+print(dsu.same_set(2, bob))
+# True
+
+print(dsu.same_set("Bob", tom))
+# False
+
+print(dsu.same_set_many([2, "Bob", bob]))
+# True
+
+print(dsu.same_set_many([3, "Tom", tom, 1]))
+# False
+
+# get_elemnt_count -------------------------------------------------------------
+print(dsu.get_element_count())
+# 9 elements (1, "Ali", ali, 2, "Bob", bob, 3, "Tom", tom)
+
+# get_component_count ----------------------------------------------------------
+print(dsu.get_component_count())
+# 3 components ({1, "Ali", ali}, {2, "Bob", bob}, {3, "Tom", tom})
+
+# get_component_size -----------------------------------------------------------
+print(dsu.get_component_size(1))
+# 3 (the size of the component containing 1, which is {1, "Ali", ali})
+
+print(dsu.get_component_size("Bob"))
+# 3 (the size of the component containing "Bob", which is {2, "Bob", bob})
+
+print(dsu.get_component_size(tom))
+# 3 (the size of the component containing tom, which is {3, "Tom", tom})
 ```
 
 ---
