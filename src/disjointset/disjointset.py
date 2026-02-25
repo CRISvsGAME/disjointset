@@ -24,11 +24,12 @@ class DisjointSet(Generic[T]):
             - same_set_many([x, y, z])
     """
 
-    __slots__ = ("parent", "size")
+    __slots__ = ("parent", "size", "_component_count")
 
     def __init__(self) -> None:
         self.parent: dict[T, T] = {}
         self.size: dict[T, int] = {}
+        self._component_count: int = 0
 
     # --------------------------------------------------------------------------
     # Core Operations
@@ -47,6 +48,7 @@ class DisjointSet(Generic[T]):
         if x not in p:
             p[x] = x
             self.size[x] = 1
+            self._component_count += 1
 
     def find(self, x: T) -> T:
         """
@@ -108,6 +110,8 @@ class DisjointSet(Generic[T]):
         else:
             p[root_y] = root_x
             s[root_x] += size_y
+
+        self._component_count -= 1
 
     def same_set(self, x: T, y: T) -> bool:
         """
@@ -214,3 +218,7 @@ class DisjointSet(Generic[T]):
     def get_element_count(self) -> int:
         """Get the total number of elements in the DisjointSet."""
         return len(self)
+
+    def get_component_count(self) -> int:
+        """Get the current number of disjoint sets (components)."""
+        return self._component_count
