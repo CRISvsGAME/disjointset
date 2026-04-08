@@ -45,11 +45,14 @@ class DisjointSet(Generic[T]):
         Args:
             x: The element to add to the DisjointSet.
         """
-        p = self.parent
+        index = self._index
 
-        if x not in p:
-            p[x] = x
-            self.size[x] = 1
+        if x not in index:
+            idx = len(self._parent)
+            index[x] = idx
+            self._items.append(x)
+            self._parent.append(idx)
+            self._size.append(1)
             self._component_count += 1
 
     def find(self, x: T) -> T:
