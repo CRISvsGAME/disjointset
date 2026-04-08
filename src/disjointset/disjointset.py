@@ -24,11 +24,13 @@ class DisjointSet(Generic[T]):
             - same_set_many([x, y, z])
     """
 
-    __slots__ = ("parent", "size", "_component_count")
+    __slots__ = ("_index", "_items", "_parent", "_size", "_component_count")
 
     def __init__(self) -> None:
-        self.parent: dict[T, T] = {}
-        self.size: dict[T, int] = {}
+        self._index: dict[T, int] = {}
+        self._items: list[T] = []
+        self._parent: list[int] = []
+        self._size: list[int] = []
         self._component_count: int = 0
 
     # --------------------------------------------------------------------------
