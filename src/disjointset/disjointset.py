@@ -69,22 +69,24 @@ class DisjointSet(Generic[T]):
         Returns:
             The representative element of the set containing x.
         """
-        p = self.parent
+        parent = self._parent
 
         try:
-            root = p[x]
+            idx = self._index[x]
         except KeyError as e:
             raise KeyError(f"{x!r} is not in the DisjointSet.") from e
 
-        while root != p[root]:
-            root = p[root]
+        root = idx
 
-        while x != root:
-            px = p[x]
-            p[x] = root
-            x = px
+        while root != parent[root]:
+            root = parent[root]
 
-        return root
+        while idx != root:
+            next_idx = parent[idx]
+            parent[idx] = root
+            idx = next_idx
+
+        return self._items[root]
 
     def union(self, x: T, y: T) -> None:
         """
