@@ -100,23 +100,52 @@ class DisjointSet(Generic[T]):
         Raises:
             KeyError: If x or y has not been added via make_set().
         """
-        p = self.parent
-        s = self.size
-        root_x = self.find(x)
-        root_y = self.find(y)
+        index = self._index
+        parent = self._parent
+        size = self._size
+
+        try:
+            idx_x = index[x]
+        except KeyError as e:
+            raise KeyError(f"{x!r} is not in the DisjointSet.") from e
+
+        root_x = idx_x
+
+        while root_x != parent[root_x]:
+            root_x = parent[root_x]
+
+        while idx_x != root_x:
+            next_idx = parent[idx_x]
+            parent[idx_x] = root_x
+            idx_x = next_idx
+
+        try:
+            idx_y = index[y]
+        except KeyError as e:
+            raise KeyError(f"{y!r} is not in the DisjointSet.") from e
+
+        root_y = idx_y
+
+        while root_y != parent[root_y]:
+            root_y = parent[root_y]
+
+        while idx_y != root_y:
+            next_idx = parent[idx_y]
+            parent[idx_y] = root_y
+            idx_y = next_idx
 
         if root_x == root_y:
             return
 
-        size_x = s[root_x]
-        size_y = s[root_y]
+        size_x = size[root_x]
+        size_y = size[root_y]
 
         if size_x < size_y:
-            p[root_x] = root_y
-            s[root_y] += size_x
+            parent[root_x] = root_y
+            size[root_y] += size_x
         else:
-            p[root_y] = root_x
-            s[root_x] += size_y
+            parent[root_y] = root_x
+            size[root_x] += size_y
 
         self._component_count -= 1
 
