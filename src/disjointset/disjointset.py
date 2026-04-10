@@ -282,7 +282,7 @@ class DisjointSet(Generic[T]):
     # ------------------------------------------------------------------------------
     def __len__(self) -> int:
         """Get the total number of elements in the DisjointSet."""
-        return len(self.parent)
+        return len(self._parent)
 
     def get_element_count(self) -> int:
         """Get the total number of elements in the DisjointSet."""
@@ -305,4 +305,21 @@ class DisjointSet(Generic[T]):
         Returns:
             The size of the component containing x.
         """
-        return self.size[self.find(x)]
+        parent = self._parent
+
+        try:
+            idx = self._index[x]
+        except KeyError as e:
+            raise KeyError(f"{x!r} is not in the DisjointSet.") from e
+
+        root = idx
+
+        while root != parent[root]:
+            root = parent[root]
+
+        while idx != root:
+            next_idx = parent[idx]
+            parent[idx] = root
+            idx = next_idx
+
+        return self._size[root]
