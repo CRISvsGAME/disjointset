@@ -163,7 +163,40 @@ class DisjointSet(Generic[T]):
         Returns:
             True if x and y are in the same set, False otherwise.
         """
-        return self.find(x) == self.find(y)
+        index = self._index
+        parent = self._parent
+
+        try:
+            idx_x = index[x]
+        except KeyError as e:
+            raise KeyError(f"{x!r} is not in the DisjointSet.") from e
+
+        root_x = idx_x
+
+        while root_x != parent[root_x]:
+            root_x = parent[root_x]
+
+        while idx_x != root_x:
+            next_idx = parent[idx_x]
+            parent[idx_x] = root_x
+            idx_x = next_idx
+
+        try:
+            idx_y = index[y]
+        except KeyError as e:
+            raise KeyError(f"{y!r} is not in the DisjointSet.") from e
+
+        root_y = idx_y
+
+        while root_y != parent[root_y]:
+            root_y = parent[root_y]
+
+        while idx_y != root_y:
+            next_idx = parent[idx_y]
+            parent[idx_y] = root_y
+            idx_y = next_idx
+
+        return root_x == root_y
 
     # --------------------------------------------------------------------------
     # Convenience Helpers
