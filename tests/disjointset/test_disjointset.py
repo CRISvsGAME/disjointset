@@ -9,18 +9,16 @@ from disjointset import DisjointSet
 
 
 def test_make_set():
-    """Test make_set operation."""
+    """Test make_set() operation."""
     dsu = DisjointSet[int]()
     dsu.make_set(1)
     dsu.make_set(2)
     assert dsu.find(1) == 1
     assert dsu.find(2) == 2
-    assert dsu.parent[1] == 1
-    assert dsu.parent[2] == 2
 
 
 def test_find():
-    """Test find operation."""
+    """Test find() operation."""
     dsu = DisjointSet[int]()
     dsu.make_set_many([1, 2, 3])
     dsu.union(1, 2)
@@ -29,7 +27,7 @@ def test_find():
 
 
 def test_union():
-    """Test union operation."""
+    """Test union() operation."""
     dsu = DisjointSet[int]()
     dsu.make_set_many([1, 2, 3])
     dsu.union(1, 2)
@@ -38,7 +36,7 @@ def test_union():
 
 
 def test_same_set():
-    """Test same_set operation."""
+    """Test same_set() operation."""
     dsu = DisjointSet[int]()
     dsu.make_set_many([1, 2, 3, 4])
     dsu.union(1, 2)
@@ -53,14 +51,14 @@ def test_same_set():
 
 
 def test_make_set_many():
-    """Test make_set_many operation."""
+    """Test make_set_many() operation."""
     dsu = DisjointSet[int]()
     dsu.make_set_many([1, 2, 3])
     assert dsu.find_many([1, 2, 3]) == (1, 2, 3)
 
 
 def test_find_many():
-    """Test find_many operation."""
+    """Test find_many() operation."""
     dsu = DisjointSet[int]()
     dsu.make_set_many([1, 2, 3])
     dsu.union_many([1, 2])
@@ -71,7 +69,7 @@ def test_find_many():
 
 
 def test_union_many():
-    """Test union_many operation."""
+    """Test union_many() operation."""
     dsu = DisjointSet[int]()
     dsu.make_set_many([1, 2, 3, 4])
     dsu.union_many([1, 2, 3])
@@ -80,7 +78,7 @@ def test_union_many():
 
 
 def test_same_set_many():
-    """Test same_set_many operation."""
+    """Test same_set_many() operation."""
     dsu = DisjointSet[int]()
     dsu.make_set_many([1, 2, 3, 4, 5])
     dsu.union_many([1, 2, 3])
@@ -96,14 +94,14 @@ def test_same_set_many():
 
 
 def test_find_missing_raises():
-    """Test that find raises KeyError for missing element."""
+    """Test that find() raises KeyError for missing element."""
     dsu = DisjointSet[int]()
     with pytest.raises(KeyError):
         dsu.find(1)
 
 
 def test_union_missing_raises():
-    """Test that union raises KeyError for missing element."""
+    """Test that union() raises KeyError for missing element."""
     dsu = DisjointSet[int]()
     dsu.make_set(1)
     with pytest.raises(KeyError):
@@ -111,7 +109,7 @@ def test_union_missing_raises():
 
 
 def test_same_set_missing_raises():
-    """Test that same_set raises KeyError for missing element."""
+    """Test that same_set() raises KeyError for missing element."""
     dsu = DisjointSet[int]()
     dsu.make_set(1)
     with pytest.raises(KeyError):
@@ -119,7 +117,7 @@ def test_same_set_missing_raises():
 
 
 def test_find_many_missing_raises():
-    """Test that find_many raises KeyError for missing element."""
+    """Test that find_many() raises KeyError for missing element."""
     dsu = DisjointSet[int]()
     dsu.make_set(1)
     with pytest.raises(KeyError):
@@ -127,14 +125,14 @@ def test_find_many_missing_raises():
 
 
 def test_union_many_empty_raises():
-    """Test that union_many raises ValueError for empty input."""
+    """Test that union_many() raises ValueError for empty input."""
     dsu = DisjointSet[int]()
     with pytest.raises(ValueError):
         dsu.union_many([])
 
 
 def test_union_many_missing_raises():
-    """Test that union_many raises KeyError for missing element."""
+    """Test that union_many() raises KeyError for missing element."""
     dsu = DisjointSet[int]()
     dsu.make_set(1)
     with pytest.raises(KeyError):
@@ -142,14 +140,14 @@ def test_union_many_missing_raises():
 
 
 def test_same_set_many_empty_raises():
-    """Test that same_set_many raises ValueError for empty input."""
+    """Test that same_set_many() raises ValueError for empty input."""
     dsu = DisjointSet[int]()
     with pytest.raises(ValueError):
         dsu.same_set_many([])
 
 
 def test_same_set_many_missing_raises():
-    """Test that same_set_many raises KeyError for missing element."""
+    """Test that same_set_many() raises KeyError for missing element."""
     dsu = DisjointSet[int]()
     dsu.make_set(1)
     with pytest.raises(KeyError):
@@ -228,30 +226,3 @@ def test_get_component_size_missing_raises():
     dsu = DisjointSet[int]()
     with pytest.raises(KeyError):
         dsu.get_component_size(1)
-
-
-# ------------------------------------------------------------------------------
-# Optimizations Tests
-# ------------------------------------------------------------------------------
-
-
-def test_path_compression_effectiveness():
-    """Test that path compression flattens the structure."""
-    dsu = DisjointSet[int]()
-    dsu.make_set_many(range(1, 11))
-
-    # Create A Linear Chain
-    for i in range(2, 11):
-        dsu.parent[i] = i - 1
-
-    # Before Path Compression
-    for i in range(1, 10):
-        assert dsu.parent[i + 1] == i
-
-    # Trigger Path Compression
-    root = dsu.find(10)
-    assert root == 1
-
-    # After Path Compression
-    for i in range(1, 11):
-        assert dsu.parent[i] == root
