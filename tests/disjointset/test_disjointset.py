@@ -251,3 +251,15 @@ def test_default_object_identity_semantics_preserve_distinct_instances():
     assert dsu.get_element_count() == 2
     assert dsu.get_component_count() == 2
     assert not dsu.same_set(alice1, alice2)
+
+
+def test_duplicate_hashable_values_are_idempotent():
+    """Test that duplicate hashable values are treated as the same element."""
+    dsu = DisjointSet[str]()
+    alice1 = "Alice"
+    alice2 = "Alice"
+    dsu.make_set(alice1)
+    dsu.make_set(alice2)
+    assert dsu.get_element_count() == 1
+    assert dsu.get_component_count() == 1
+    assert dsu.same_set(alice1, alice2)
