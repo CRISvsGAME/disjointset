@@ -226,3 +226,28 @@ def test_get_component_size_missing_raises():
     dsu = DisjointSet[int]()
     with pytest.raises(KeyError):
         dsu.get_component_size(1)
+
+
+# ------------------------------------------------------------------------------
+# Hashing and Identity Semantics Tests
+# ------------------------------------------------------------------------------
+
+
+# pylint: disable=too-few-public-methods
+class Person:
+    """Simple hashable object using default identity equality."""
+
+    def __init__(self, name: str):
+        self.name = name
+
+
+def test_default_object_identity_semantics_preserve_distinct_instances():
+    """Test that default object identity semantics preserve distinct instances."""
+    dsu = DisjointSet[Person]()
+    alice1 = Person("Alice")
+    alice2 = Person("Alice")
+    dsu.make_set(alice1)
+    dsu.make_set(alice2)
+    assert dsu.get_element_count() == 2
+    assert dsu.get_component_count() == 2
+    assert not dsu.same_set(alice1, alice2)
