@@ -282,3 +282,17 @@ def test_chain_unions_create_single_component():
     assert dsu.get_element_count() == n
     assert dsu.get_component_count() == 1
     assert dsu.get_component_size(0) == n
+
+
+def test_find_is_idempotent_after_path_compression():
+    """Test repeated find() calls preserve the same representative."""
+    dsu = DisjointSet[int]()
+    dsu.make_set_many([1, 2, 3, 4, 5])
+    dsu.union(1, 2)
+    dsu.union(2, 3)
+    dsu.union(3, 4)
+    dsu.union(4, 5)
+    root = dsu.find(1)
+    for x in (1, 2, 3, 4, 5):
+        assert dsu.find(x) == root
+        assert dsu.same_set(x, 1)
