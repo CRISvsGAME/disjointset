@@ -263,3 +263,22 @@ def test_duplicate_hashable_values_are_idempotent():
     assert dsu.get_element_count() == 1
     assert dsu.get_component_count() == 1
     assert dsu.same_set(alice1, alice2)
+
+
+# ------------------------------------------------------------------------------
+# Structural Invariant Tests
+# ------------------------------------------------------------------------------
+
+
+def test_chain_unions_create_single_component():
+    """Test connectivity, component count, and component size across a chain."""
+    dsu = DisjointSet[int]()
+    n = 1000
+    dsu.make_set_many(range(n))
+    for i in range(n - 1):
+        dsu.union(i, i + 1)
+    for i in range(n):
+        assert dsu.same_set(0, i)
+    assert dsu.get_element_count() == n
+    assert dsu.get_component_count() == 1
+    assert dsu.get_component_size(0) == n
