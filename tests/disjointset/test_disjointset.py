@@ -310,3 +310,17 @@ def test_union_element_with_itself_is_noop():
     assert dsu.get_component_size(1) == 1
     assert dsu.get_component_size(2) == 1
     assert dsu.get_component_size(3) == 1
+
+
+def test_duplicate_union_is_noop():
+    """Test repeated union() of the same component does not change metadata."""
+    dsu = DisjointSet[int]()
+    dsu.make_set_many([1, 2, 3])
+    dsu.union(1, 2)
+    dsu.union(2, 1)
+    dsu.union(1, 2)
+    assert dsu.get_element_count() == 3
+    assert dsu.get_component_count() == 2
+    assert dsu.get_component_size(1) == 2
+    assert dsu.get_component_size(2) == 2
+    assert dsu.get_component_size(3) == 1
