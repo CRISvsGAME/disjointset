@@ -296,3 +296,17 @@ def test_find_is_idempotent_after_path_compression():
     for x in (1, 2, 3, 4, 5):
         assert dsu.find(x) == root
         assert dsu.same_set(x, 1)
+
+
+def test_union_element_with_itself_is_noop():
+    """Test union(x, x) does not change component metadata."""
+    dsu = DisjointSet[int]()
+    dsu.make_set_many([1, 2, 3])
+    dsu.union(1, 1)
+    dsu.union(2, 2)
+    dsu.union(3, 3)
+    assert dsu.get_element_count() == 3
+    assert dsu.get_component_count() == 3
+    assert dsu.get_component_size(1) == 1
+    assert dsu.get_component_size(2) == 1
+    assert dsu.get_component_size(3) == 1
