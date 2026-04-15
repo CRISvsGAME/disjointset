@@ -331,3 +331,12 @@ def test_same_set_many_single_element_is_true():
     dsu = DisjointSet[int]()
     dsu.make_set(1)
     assert dsu.same_set_many([1])
+
+
+def test_union_many_single_element_is_noop():
+    """Test union_many() accepts one element without changing components."""
+    dsu = DisjointSet[int]()
+    dsu.make_set_many([1, 2])
+    dsu.union_many([1])
+    assert dsu.get_component_count() == 2
+    assert dsu.get_component_size(1) == 1
