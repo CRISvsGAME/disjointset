@@ -324,3 +324,10 @@ def test_duplicate_union_is_noop():
     assert dsu.get_component_size(1) == 2
     assert dsu.get_component_size(2) == 2
     assert dsu.get_component_size(3) == 1
+
+
+def test_same_set_many_single_element_is_true():
+    """Test same_set_many() returns True for a single existing element."""
+    dsu = DisjointSet[int]()
+    dsu.make_set(1)
+    assert dsu.same_set_many([1])
