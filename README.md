@@ -1,6 +1,6 @@
 # DisjointSet
 
-## Disjoint Set (Union Find) Data Structure for Python
+## Disjoint Set (Union-Find) Data Structure for Python
 
 A generic, type-safe Disjoint Set Union (Union-Find) data structure.
 
@@ -84,7 +84,7 @@ print(dsu.same_set_many([2, "Bob", bob]))
 print(dsu.same_set_many([3, "Tom", tom, 1]))
 # False
 
-# get_elemnt_count -------------------------------------------------------------
+# get_element_count -------------------------------------------------------------
 print(dsu.get_element_count())
 # 9 elements (1, "Ali", ali, 2, "Bob", bob, 3, "Tom", tom)
 
@@ -121,13 +121,32 @@ print(dsu.get_component_size(tom))
 - `union_many(iterable)`
 - `same_set_many(iterable)`
 
+### Metadata Helpers
+
+- `get_element_count()`
+- `get_component_count()`
+- `get_component_size(x)`
+
 ### Fully Typed
 
 Supports any hashable type:
 
 ```python
-dsu = DisjointSet[str]()
+# int, float, complex
+# bool
+# tuple¹, range
+# str
+# bytes, memoryview²
+# frozenset
+
+dsu = DisjointSet[int | float | complex | bool | str]()
 ```
+
+Notes:
+
+¹ tuple is hashable if all contained elements are hashable.
+
+² memoryview is hashable if the underlying buffer is read-only.
 
 ---
 
@@ -137,6 +156,8 @@ dsu = DisjointSet[str]()
 src/
     disjointset/
         disjointset.py
+stats/
+    main.py
 tests/
     disjointset/
         test_disjointset.py
