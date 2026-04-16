@@ -340,3 +340,11 @@ def test_union_many_single_element_is_noop():
     dsu.union_many([1])
     assert dsu.get_component_count() == 2
     assert dsu.get_component_size(1) == 1
+
+
+def test_make_set_many_empty_is_noop():
+    """Test make_set_many() accepts empty input without changing state."""
+    dsu = DisjointSet[int]()
+    dsu.make_set_many([])
+    assert dsu.get_element_count() == 0
+    assert dsu.get_component_count() == 0
