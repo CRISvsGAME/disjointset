@@ -1,4 +1,4 @@
-"""Tests for Disjoint Set (Union Find) Data Structure."""
+"""Tests for Disjoint Set (Union-Find) Data Structure."""
 
 import pytest
 from disjointset import DisjointSet
